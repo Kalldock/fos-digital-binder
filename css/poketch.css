@@ -1,0 +1,169 @@
+/* =====================================================================
+ * FOS Digital Binder – Pokétch Edition
+ * Zusätzliche Design-Schicht, greift nur bei <html data-design="poketch">.
+ * Eigene Gestaltung: rot/graues Gehäuse, grünes LCD, eigene Pixelschrift (fonts/fos-lcd-pixel.ttf)
+ * und eigene Pixel-Symbole. Keine Original-Grafiken. Schreibfläche und Funktionen bleiben unberührt.
+ * ===================================================================== */
+@font-face { font-family: "FOS LCD Pixel"; src: url("../fonts/fos-lcd-pixel.ttf") format("truetype"); font-display: swap; }
+
+.pk-hero, .binder .pk-app { display: none; }
+
+/* ---------- Farben: Gehäuse rot/grau, LCD grün (hell = Hintergrundbeleuchtung an) ---------- */
+:root[data-design="poketch"] {
+  --pk-red: #d23c33; --pk-red2: #a92b24; --pk-grey: #3b3e44; --pk-grey2: #2a2c30; --pk-silver: #d9dcdf;
+  --pk-ink: #1f3a24; --pk-lcd: #b4d19f; --pk-lcd2: #c6ddb3; --pk-lcd3: #9dbe87; --pk-lit: #d3eac0;
+  --pk-px: "FOS LCD Pixel", ui-monospace, monospace;
+  --bg: var(--pk-lcd); --surface: var(--pk-lcd2); --surface2: #bcd7a8; --surface3: #a8c893; --line: #6f9468;
+  --text: var(--pk-ink); --muted: #3d5c3f; --primary: #c8352e; --on-primary: #ffffff; --primary-cont: #e8c2bd;
+  --danger: #b3261e; --desk: var(--pk-grey); --shadow: 0 8px 18px rgba(20,25,20,.35);
+  color-scheme: light;
+}
+:root[data-design="poketch"][data-theme="dark"] {
+  /* „Display gedimmt“: etwas dunkleres Grün, gleiche dunkle Schrift */
+  --pk-lcd: #9fbe8a; --pk-lcd2: #b0cc9a; --muted: #2b4530; --pk-lit: #c2dcaf; --bg: var(--pk-lcd); --surface: var(--pk-lcd2); --surface2: #a6c491; --surface3: #93b47e;
+  --pk-red: #b8322b; --pk-red2: #8f241e; --pk-grey: #2c2e33; --pk-grey2: #1f2124; --desk: #2c2e33;
+}
+:root[data-design="poketch"] body { background: var(--pk-grey2); }
+
+/* LCD-Struktur: feine Pixelzeilen (statisch, ohne Rechenaufwand) */
+:root[data-design="poketch"] #home, :root[data-design="poketch"] #subject, :root[data-design="poketch"] .panel {
+  background:
+    repeating-linear-gradient(0deg, rgba(20,50,20,.045) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(20,50,20,.035) 0 1px, transparent 1px 3px),
+    var(--bg);
+}
+/* Gehäuserahmen rund ums Display */
+:root[data-design="poketch"] .home-scroll, :root[data-design="poketch"] #subject .list-scroll { box-shadow: inset 0 0 0 6px var(--pk-grey), inset 0 0 0 8px #15171a, inset 4px 4px 14px rgba(0,0,0,.25); }
+
+/* ---------- Schrift ---------- */
+:root[data-design="poketch"] .topbar .title, :root[data-design="poketch"] .home-head h1, :root[data-design="poketch"] .dialog h2,
+:root[data-design="poketch"] .tb-card h2, :root[data-design="poketch"] .fc-title, :root[data-design="poketch"] .pk-name,
+:root[data-design="poketch"] .tb-tile b, :root[data-design="poketch"] .item .meta b, :root[data-design="poketch"] .crumbs, :root[data-design="poketch"] .tb-tabs button span, :root[data-design="poketch"] .fc-tabs button {
+  font-family: var(--pk-px); font-weight: 400; letter-spacing: .04em;
+}
+:root[data-design="poketch"] .topbar .title small { font-family: system-ui, sans-serif; letter-spacing: .02em; }
+
+/* ---------- Kopfleisten = rotes Gehäuse mit Silberkante ---------- */
+:root[data-design="poketch"] .topbar, :root[data-design="poketch"] .subbar, :root[data-design="poketch"] .fc-head {
+  background: linear-gradient(180deg, var(--pk-red) 0%, var(--pk-red2) 100%); color: #fff;
+  border-bottom: 3px solid var(--pk-grey2); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 0 rgba(0,0,0,.18);
+}
+:root[data-design="poketch"] .subbar { background: linear-gradient(180deg, #4a4d53, var(--pk-grey)); }
+:root[data-design="poketch"] .topbar .title, :root[data-design="poketch"] .topbar .title small, :root[data-design="poketch"] .subbar, :root[data-design="poketch"] .fc-head { color: #fff; }
+:root[data-design="poketch"] .topbar .title { font-size: 20px; }
+:root[data-design="poketch"] .topbar .title small { color: #ffe1dc; }
+
+/* Runde, leicht erhabene Tasten (Silber) */
+:root[data-design="poketch"] .topbar .ibtn, :root[data-design="poketch"] .subbar .ibtn, :root[data-design="poketch"] .fc-head .ibtn {
+  border-radius: 50%; color: #2a2c30;
+  background: radial-gradient(circle at 35% 30%, #ffffff 0%, var(--pk-silver) 45%, #a9adb2 100%);
+  box-shadow: 0 2px 0 #6c7076, 0 3px 6px rgba(0,0,0,.35), inset 0 -2px 2px rgba(0,0,0,.15);
+  transition: transform .08s, box-shadow .08s;
+}
+:root[data-design="poketch"] .topbar .ibtn:active, :root[data-design="poketch"] .subbar .ibtn:active, :root[data-design="poketch"] .fc-head .ibtn:active { transform: translateY(2px); box-shadow: 0 0 0 #6c7076, 0 1px 2px rgba(0,0,0,.35); }
+:root[data-design="poketch"] .ibtn.on {
+  color: var(--pk-ink) !important; background: radial-gradient(circle at 40% 35%, var(--pk-lit), var(--pk-lcd)) !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.35), 0 0 0 2px var(--pk-grey2) !important;
+}
+:root[data-design="poketch"] .sep { background: rgba(255,255,255,.35); }
+
+/* Knöpfe und Felder auf dem LCD */
+:root[data-design="poketch"] .btn { border-radius: 12px; box-shadow: 0 2px 0 rgba(0,0,0,.25), inset 0 0 0 2px rgba(31,58,36,.35); }
+:root[data-design="poketch"] .btn:active { transform: translateY(2px); box-shadow: inset 0 0 0 2px rgba(31,58,36,.35); }
+:root[data-design="poketch"] .btn.primary { background: linear-gradient(180deg, var(--pk-red), var(--pk-red2)); color: #fff; box-shadow: 0 3px 0 #6e1c17; }
+:root[data-design="poketch"] input, :root[data-design="poketch"] select, :root[data-design="poketch"] textarea { background: #e3f0d6; color: var(--pk-ink); border-color: #6f9468; }
+:root[data-design="poketch"] .chip.on { background: var(--pk-ink); color: var(--pk-lit); }
+
+/* Dialoge, Menüs, Karten: LCD-Fenster mit dunklem Rahmen */
+:root[data-design="poketch"] .dialog, :root[data-design="poketch"] .menu-pop, :root[data-design="poketch"] .tb-card, :root[data-design="poketch"] .tb-form, :root[data-design="poketch"] .item, :root[data-design="poketch"] .tb-tile {
+  background: var(--surface); border: 3px solid var(--pk-ink); box-shadow: 4px 4px 0 rgba(31,58,36,.35); border-radius: 12px;
+}
+:root[data-design="poketch"] .dialog h2, :root[data-design="poketch"] .tb-card h2 { color: var(--pk-ink); }
+:root[data-design="poketch"] .toast { background: var(--pk-ink); color: var(--pk-lit); border: 2px solid var(--pk-lit); }
+:root[data-design="poketch"] .scrim { background: rgba(20,25,20,.45); }
+
+/* ---------- Startseite: LCD-Anzeige mit Uhr, Datum, Kalender, Batterie ---------- */
+:root[data-design="poketch"] .hy-hero { display: none; }
+:root[data-design="poketch"] .pk-hero { display: block; margin: 4px 2px 22px; }
+.pk-lcd { position: relative; display: flex; gap: 24px; align-items: stretch; padding: 18px 22px; border-radius: 16px; background: var(--pk-lit); color: var(--pk-ink);
+  border: 4px solid var(--pk-ink); box-shadow: 0 0 0 8px var(--pk-grey), 0 0 0 10px #15171a, 0 14px 26px -10px rgba(0,0,0,.6); font-family: var(--pk-px); margin: 10px; }
+.pk-clock { display: flex; flex-direction: column; justify-content: center; gap: 6px; flex: 1; min-width: 0; }
+.pk-time { font-size: clamp(56px, 9vw, 104px); line-height: 1; letter-spacing: .02em; }
+.pk-time i { font-style: normal; animation: pkblink 2s steps(1) infinite; }
+@keyframes pkblink { 50% { opacity: .25; } }
+.pk-date { font-size: 22px; }
+.pk-title { font-size: 15px; opacity: .75; letter-spacing: .12em; }
+.pk-cal { width: 230px; flex: none; font-size: 13px; }
+.pk-cal-h { text-align: center; font-size: 16px; margin-bottom: 6px; }
+.pk-cal-g { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.pk-cal-g b { font-weight: 400; opacity: .7; }
+.pk-cal-g span, .pk-cal-g b, .pk-cal-g i { line-height: 24px; }
+.pk-cal-g span.on { background: var(--pk-ink); color: var(--pk-lit); border-radius: 3px; }
+.pk-batt { position: absolute; right: 14px; top: 10px; display: flex; gap: 2px; padding: 2px 4px 2px 2px; border: 2px solid var(--pk-ink); border-radius: 3px; }
+.pk-batt::after { content: ""; position: absolute; right: -6px; top: 4px; width: 3px; height: 6px; background: var(--pk-ink); }
+.pk-batt i { width: 6px; height: 10px; background: var(--pk-ink); }
+@media (max-width: 700px) { .pk-lcd { flex-direction: column; gap: 12px; } .pk-cal { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .pk-time i { animation: none; } }
+:root[data-design="poketch"] .home-head h1 { font-size: 24px; color: var(--pk-ink); }
+:root[data-design="poketch"] .home-head h1::before { content: "▶ "; font-size: .8em; }
+:root[data-design="poketch"] .home-head p { color: var(--muted); }
+
+/* Werkzeug-Kacheln */
+:root[data-design="poketch"] .tb-tile .ic { color: var(--pk-red); }
+
+/* ---------- Fächer als App-Symbole ---------- */
+:root[data-design="poketch"] .binders { grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 18px 14px; }
+:root[data-design="poketch"] .binder { aspect-ratio: auto; background: none; box-shadow: none; border: 0; min-height: 0; padding: 0; overflow: visible; }
+:root[data-design="poketch"] .binder::before, :root[data-design="poketch"] .binder::after { display: none; }
+:root[data-design="poketch"] .binder .rings, :root[data-design="poketch"] .binder .emblem, :root[data-design="poketch"] .binder .label, :root[data-design="poketch"] .binder .hy-ico { display: none; }
+:root[data-design="poketch"] .binder .pk-app { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 0; }
+:root[data-design="poketch"] .pk-ico {
+  position: relative; width: 92px; height: 92px; display: flex; align-items: center; justify-content: center; border-radius: 16px;
+  color: var(--pk-ink); background: color-mix(in srgb, var(--p) 32%, var(--pk-lit));
+  border: 3px solid var(--pk-ink); box-shadow: 4px 4px 0 rgba(31,58,36,.4), inset 0 0 0 3px rgba(255,255,255,.35);
+  transition: transform .1s steps(2), background .1s steps(2), color .1s steps(2);
+}
+:root[data-design="poketch"] .pk-ico::after { content: ""; position: absolute; left: 6px; right: 6px; top: 5px; height: 5px; border-radius: 3px; background: var(--p); opacity: .9; }
+:root[data-design="poketch"] .pk-svg { width: 60%; height: 60%; image-rendering: pixelated; }
+:root[data-design="poketch"] .pk-name { font-size: 15px; color: var(--pk-ink); text-align: center; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+:root[data-design="poketch"] .pk-cnt { position: absolute; top: -4px; right: calc(50% - 56px); min-width: 24px; height: 24px; padding: 0 6px; border-radius: 12px; background: var(--pk-red); color: #fff; font: 13px/24px var(--pk-px); text-align: center; border: 2px solid var(--pk-grey2); }
+:root[data-design="poketch"] .binder:active .pk-ico { transform: translate(3px, 3px); box-shadow: 1px 1px 0 rgba(31,58,36,.4); background: var(--pk-ink); color: var(--pk-lit); }
+:root[data-design="poketch"] .binder .menu { top: -8px; right: calc(50% - 82px); left: auto; bottom: auto; width: 40px; height: 40px; color: var(--pk-ink); opacity: .75; }
+:root[data-design="poketch"] .binder.add { width: 92px; height: 92px; justify-self: center; border-radius: 16px; border: 3px dashed var(--pk-ink); background: transparent; color: var(--pk-ink); box-shadow: none; margin-top: 4px; }
+:root[data-design="poketch"] .binder.add span { font: 13px var(--pk-px); }
+
+/* ---------- Editor: Schreibfläche bleibt unverändert, nur das Gehäuse drumherum ---------- */
+:root[data-design="poketch"] .scroller { background: repeating-linear-gradient(45deg, rgba(255,255,255,.025) 0 2px, transparent 2px 6px), var(--desk); }
+:root[data-design="poketch"] .thumbs { background: var(--pk-grey2); border-right: 3px solid #15171a; }
+:root[data-design="poketch"] .thumbs, :root[data-design="poketch"] .thumbs * { --text: #e9ecef; --muted: #b9bec4; }
+:root[data-design="poketch"] .page { box-shadow: 0 0 0 3px #15171a, 0 10px 24px rgba(0,0,0,.5); }
+:root[data-design="poketch"] .zoom-pill { background: var(--pk-lit); border: 3px solid var(--pk-ink); }
+
+/* Werkzeugkasten-Tabs und Taschenrechner als kleine LCD-Apps */
+:root[data-design="poketch"] .tb-tabs button.on, :root[data-design="poketch"] .fc-tabs button.on { background: var(--pk-ink); color: var(--pk-lit); }
+:root[data-design="poketch"] .fc { background: var(--pk-grey); border: 0; box-shadow: 0 0 0 3px #15171a, 0 18px 40px rgba(0,0,0,.5); }
+:root[data-design="poketch"] .fc-tabs { background: var(--pk-grey); border-bottom-color: #15171a; }
+:root[data-design="poketch"] .fc-tabs button { color: #d8dcdf; }
+:root[data-design="poketch"] .fc-body { background: var(--pk-grey); }
+:root[data-design="poketch"] .fc-disp { background: var(--pk-lit); border: 3px solid var(--pk-ink); box-shadow: inset 0 0 0 2px rgba(255,255,255,.35); color: var(--pk-ink); }
+:root[data-design="poketch"] .fc-res, :root[data-design="poketch"] .fc-in { font-family: var(--pk-px); }
+:root[data-design="poketch"] .fc-keys button { border-radius: 50px; background: radial-gradient(circle at 35% 30%, #fff, var(--pk-silver) 55%, #a9adb2); color: #2a2c30; box-shadow: 0 3px 0 #6c7076; }
+:root[data-design="poketch"] .fc-keys button:active { transform: translateY(3px); box-shadow: none; }
+:root[data-design="poketch"] .fc-keys button.eq { background: radial-gradient(circle at 35% 30%, #ff8a80, var(--pk-red) 60%, var(--pk-red2)); color: #fff; box-shadow: 0 3px 0 #6e1c17; }
+:root[data-design="poketch"] .fc-keys .sci button { background: radial-gradient(circle at 35% 30%, #e8e8e8, #b9bdc2); border: 0; }
+:root[data-design="poketch"] .fc-acts button { background: #4a4d53; color: #fff; }
+:root[data-design="poketch"] .fc-body .fc-form label, :root[data-design="poketch"] .fc-body .fc-note, :root[data-design="poketch"] .fc-body .fc-info, :root[data-design="poketch"] .fc-gbar { color: #d8dcdf; }
+
+/* ---------- LCD-Übergang beim Wechsel zwischen Ansichten (kurz, in Stufen) ---------- */
+:root[data-design="poketch"] #home, :root[data-design="poketch"] #subject { animation: pkview .22s steps(4) both; }
+@keyframes pkview { from { opacity: 0; filter: contrast(1.6) brightness(1.15); } to { opacity: 1; filter: none; } }
+@media (prefers-reduced-motion: reduce) { :root[data-design="poketch"] #home, :root[data-design="poketch"] #subject { animation: none; } }
+
+/* ---------- Startbildschirm ---------- */
+.pk-boot { position: fixed; inset: 0; z-index: 400; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, #d23c33, #8f241e); pointer-events: none; transition: opacity .35s; }
+.pk-boot.out { opacity: 0; }
+.pk-boot-lcd { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 28px 46px; border-radius: 18px; background: #c6ddb3; color: #1f3a24; border: 4px solid #1f3a24; box-shadow: 0 0 0 10px #3b3e44, 0 0 0 13px #15171a; font-family: "FOS LCD Pixel", monospace; }
+.pk-boot-lcd b { font-size: 64px; font-weight: 400; letter-spacing: .1em; animation: pkboot .5s steps(3) both; }
+.pk-boot-lcd span { font-size: 18px; letter-spacing: .14em; }
+.pk-boot-lcd em { font-style: normal; font-size: 14px; animation: pkblink .5s steps(1) infinite; }
+@keyframes pkboot { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }

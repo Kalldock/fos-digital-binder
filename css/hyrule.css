@@ -1,0 +1,306 @@
+/* =====================================================================
+ * FOS Digital Binder – Hyrule Edition
+ * Zusätzliche Design-Schicht. Greift nur, wenn <html data-design="hyrule"> gesetzt ist.
+ * Eigene Muster aus CSS/SVG (keine Original-Grafiken). Funktionen und Daten bleiben unberührt.
+ * ===================================================================== */
+
+/* Überschriften-Schrift „The Wild Breath of Zelda“ (frei nutzbar, siehe fonts/wild-breath-LIZENZ.txt);
+   um deutsche Umlaute/ß ergänzt. Offline eingebettet. */
+@font-face { font-family: "Wild Breath"; src: url("../fonts/wild-breath.ttf") format("truetype"); font-display: swap; }
+
+/* Elemente, die es nur im Hyrule-Design gibt */
+.hy-hero, .binder .hy-ico { display: none; }
+
+/* ---------- Farbpalette: Dunkel = Wald & Stein, Hell = Pergament ---------- */
+:root[data-design="hyrule"] {
+  --hy-forest: #243D32; --hy-deep: #172B23; --hy-gold: #C5A45B; --hy-parch: #D9D0B8; --hy-parch2: #EEE7D5; --hy-teal: #51BDB5; --hy-ink: #172B23;
+  --bg: #13241d; --surface: #1b3128; --surface2: #243D32; --surface3: #2f4c3f; --line: rgba(197,164,91,.30);
+  --text: #EEE7D5; --muted: #bfb69c; --primary: #51BDB5; --on-primary: #0b201c; --primary-cont: #1d4a44;
+  --danger: #ff8f7d; --desk: #102019; --shadow: 0 12px 30px rgba(0,0,0,.45);
+  --hy-serif: "Wild Breath", "Noto Serif", "Droid Serif", Georgia, serif;
+  --hy-card: linear-gradient(160deg, #24402f 0%, #1a2f25 55%, #15271f 100%);
+  --hy-frame: inset 0 0 0 1px rgba(197,164,91,.55), inset 0 0 0 4px rgba(10,22,17,.55), inset 0 0 0 5px rgba(197,164,91,.22);
+  color-scheme: dark;
+}
+:root[data-design="hyrule"][data-theme="light"] {
+  --hy-ink: #172B23;
+  --bg: #D9D0B8; --surface: #EEE7D5; --surface2: #e2d8bf; --surface3: #d4c7a6; --line: #b9a77c;
+  --text: #172B23; --muted: #574f3c; --primary: #1d7a73; --on-primary: #ffffff; --primary-cont: #cfe3db;
+  --danger: #b3331f; --desk: #c9bd9c; --shadow: 0 10px 26px rgba(60,45,15,.22);
+  --hy-card: linear-gradient(160deg, #f3ecda 0%, #e9dfc6 60%, #ddd0b0 100%);
+  --hy-frame: inset 0 0 0 1px rgba(139,108,45,.65), inset 0 0 0 4px rgba(238,231,213,.7), inset 0 0 0 5px rgba(139,108,45,.25);
+  color-scheme: light;
+}
+
+/* ---------- Hintergrund: Stein/Wald mit feinen Linien antiker Technik ---------- */
+:root[data-design="hyrule"] body { background: var(--bg); }
+:root[data-design="hyrule"] #home, :root[data-design="hyrule"] #subject, :root[data-design="hyrule"] .panel {
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 0%, rgba(81,189,181,.10), transparent 60%),
+    radial-gradient(ellipse 70% 60% at 100% 100%, rgba(197,164,91,.10), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cg fill='none' stroke='%23C5A45B' stroke-opacity='.07' stroke-width='1'%3E%3Cpath d='M0 80h40l20-20h40l20 20h40M80 0v40l-20 20v40l20 20v40'/%3E%3Ccircle cx='80' cy='80' r='6'/%3E%3Cpath d='M74 80l6-6 6 6-6 6z'/%3E%3C/g%3E%3C/svg%3E"),
+    var(--bg);
+}
+:root[data-design="hyrule"][data-theme="light"] #home, :root[data-design="hyrule"][data-theme="light"] #subject, :root[data-design="hyrule"][data-theme="light"] .panel {
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(255,255,255,.45), transparent 60%),
+    radial-gradient(ellipse 60% 60% at 100% 100%, rgba(139,108,45,.16), transparent 65%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cg fill='none' stroke='%238b6c2d' stroke-opacity='.10' stroke-width='1'%3E%3Cpath d='M0 80h40l20-20h40l20 20h40M80 0v40l-20 20v40l20 20v40'/%3E%3Ccircle cx='80' cy='80' r='6'/%3E%3Cpath d='M74 80l6-6 6 6-6 6z'/%3E%3C/g%3E%3C/svg%3E"),
+    var(--bg);
+}
+:root[data-design="hyrule"] .home-scroll, :root[data-design="hyrule"] .list-scroll { background: transparent; }
+
+/* ---------- Schrift ---------- */
+:root[data-design="hyrule"] .topbar .title, :root[data-design="hyrule"] .home-head h1, :root[data-design="hyrule"] .dialog h2,
+:root[data-design="hyrule"] .tb-card h2, :root[data-design="hyrule"] .fc-title, :root[data-design="hyrule"] .binder .label b, :root[data-design="hyrule"] .hy-name {
+  font-family: var(--hy-serif); letter-spacing: .02em;
+}
+
+/* ---------- Kopfleisten: dunkles Holz/Stein mit Goldkante und türkiser Leuchtlinie ---------- */
+:root[data-design="hyrule"] .topbar, :root[data-design="hyrule"] .subbar {
+  background: linear-gradient(180deg, #1f392d, #172B23); border-bottom: 1px solid rgba(197,164,91,.55);
+  box-shadow: 0 1px 0 rgba(81,189,181,.25), 0 6px 16px -10px rgba(0,0,0,.6);
+}
+:root[data-design="hyrule"] .subbar { background: linear-gradient(180deg, #1b3128, #172B23); box-shadow: 0 1px 0 rgba(81,189,181,.18); }
+:root[data-design="hyrule"][data-theme="light"] .topbar { background: linear-gradient(180deg, #f1ead7, #e2d7ba); border-bottom-color: #a88f55; box-shadow: 0 1px 0 rgba(29,122,115,.25), 0 6px 16px -10px rgba(60,45,15,.35); }
+:root[data-design="hyrule"][data-theme="light"] .subbar { background: linear-gradient(180deg, #ece4cf, #e2d7ba); border-bottom-color: #b9a77c; }
+:root[data-design="hyrule"] .topbar .title small { color: var(--hy-gold); letter-spacing: .08em; }
+:root[data-design="hyrule"][data-theme="light"] .topbar .title small { color: #7a5f24; }
+
+/* Werkzeug-Knöpfe: antike Technik – Goldrahmen, aktive Werkzeuge leuchten türkis */
+:root[data-design="hyrule"] .ibtn { border-radius: 11px; transition: background .15s, box-shadow .2s, color .15s; }
+:root[data-design="hyrule"] .ibtn:active { background: rgba(197,164,91,.18); }
+:root[data-design="hyrule"] .ibtn.on {
+  background: linear-gradient(180deg, rgba(81,189,181,.24), rgba(81,189,181,.10)); color: #7fe0d8;
+  box-shadow: inset 0 0 0 1px rgba(81,189,181,.75), 0 0 12px -2px rgba(81,189,181,.55);
+}
+:root[data-design="hyrule"][data-theme="light"] .ibtn.on { color: #135a54; background: linear-gradient(180deg, rgba(29,122,115,.20), rgba(29,122,115,.08)); box-shadow: inset 0 0 0 1px rgba(29,122,115,.7), 0 0 10px -3px rgba(29,122,115,.5); }
+:root[data-design="hyrule"] .sep { background: linear-gradient(180deg, transparent, rgba(197,164,91,.6), transparent); }
+
+/* Knöpfe, Chips, Eingaben */
+:root[data-design="hyrule"] .btn { border-radius: 12px; box-shadow: inset 0 0 0 1px rgba(197,164,91,.35); }
+:root[data-design="hyrule"] .btn.primary { background: linear-gradient(180deg, #5fcac2, #3fa79f); color: #0b201c; box-shadow: inset 0 0 0 1px rgba(255,255,255,.25), 0 0 14px -4px rgba(81,189,181,.7); }
+:root[data-design="hyrule"][data-theme="light"] .btn.primary { background: linear-gradient(180deg, #2a8d85, #1d7a73); color: #fff; }
+:root[data-design="hyrule"] .btn.tonal { background: rgba(197,164,91,.18); }
+:root[data-design="hyrule"] .chip { border-radius: 9px; box-shadow: inset 0 0 0 1px rgba(197,164,91,.25); }
+:root[data-design="hyrule"] .chip.on { background: rgba(81,189,181,.20); box-shadow: inset 0 0 0 1px rgba(81,189,181,.7); }
+:root[data-design="hyrule"] input:focus, :root[data-design="hyrule"] select:focus, :root[data-design="hyrule"] textarea:focus { border-color: var(--hy-teal); box-shadow: 0 0 0 3px rgba(81,189,181,.18); }
+
+/* Dialoge, Menüs, Toasts als Stein-/Pergamenttafeln */
+:root[data-design="hyrule"] .dialog, :root[data-design="hyrule"] .menu-pop {
+  background: var(--hy-card); box-shadow: var(--hy-frame), var(--shadow); border: 0;
+}
+:root[data-design="hyrule"] .dialog h2 { color: var(--hy-gold); }
+:root[data-design="hyrule"][data-theme="light"] .dialog h2 { color: #6d531c; }
+:root[data-design="hyrule"] .toast { background: #172B23; color: #EEE7D5; box-shadow: inset 0 0 0 1px rgba(197,164,91,.6), var(--shadow); }
+:root[data-design="hyrule"] .scrim { background: rgba(6,14,10,.58); }
+
+/* ---------- Startseite ---------- */
+:root[data-design="hyrule"] .hy-hero { display: flex; align-items: center; gap: 22px; margin: 2px 4px 26px; padding: 18px 22px; border-radius: 20px; background: var(--hy-card); box-shadow: var(--hy-frame), var(--shadow); position: relative; overflow: hidden; }
+:root[data-design="hyrule"] .hy-hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(60deg, rgba(197,164,91,.05) 0 1px, transparent 1px 22px), repeating-linear-gradient(-60deg, rgba(197,164,91,.05) 0 1px, transparent 1px 22px); }
+.hy-crest { width: 96px; height: 96px; flex: none; filter: drop-shadow(0 0 10px rgba(81,189,181,.25)); }
+.hy-hero-t { min-width: 0; flex: 1; }
+.hy-kicker { font-size: 13px; letter-spacing: .32em; text-transform: uppercase; color: var(--hy-teal); font-weight: 600; }
+:root[data-theme="light"] .hy-kicker { color: #1d7a73; }
+.hy-hero h1 { margin: 4px 0 6px; font-family: var(--hy-serif); font-weight: 700; font-size: clamp(30px, 5vw, 54px); letter-spacing: .05em; font-weight: 400; color: var(--hy-gold);
+  text-shadow: 0 1px 0 rgba(0,0,0,.45), 0 0 18px rgba(197,164,91,.25); line-height: 1.1; }
+:root[data-theme="light"] .hy-hero h1 { color: #6d531c; text-shadow: 0 1px 0 rgba(255,255,255,.6); }
+.hy-band { width: min(420px, 100%); height: 14px; display: block; }
+.hy-glow { animation: hyglow 5s ease-in-out infinite; }
+@keyframes hyglow { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hy-glow { animation: none; } }
+:root[data-design="hyrule"] .home-head h1 { color: var(--hy-gold); font-size: 24px; }
+:root[data-design="hyrule"][data-theme="light"] .home-head h1 { color: #6d531c; }
+:root[data-design="hyrule"] .home-head h1::before { content: "◆ "; color: var(--hy-teal); font-size: .6em; vertical-align: .25em; }
+
+/* Werkzeug-Kacheln */
+:root[data-design="hyrule"] .tb-tile { background: var(--hy-card); box-shadow: var(--hy-frame); border: 0; }
+:root[data-design="hyrule"] .tb-tile .ic { color: var(--hy-teal); }
+:root[data-design="hyrule"][data-theme="light"] .tb-tile .ic { color: #1d7a73; }
+:root[data-design="hyrule"] .tb-tile b { font-family: var(--hy-serif); }
+
+/* Fächer als Inventar-Gegenstände */
+:root[data-design="hyrule"] .binders { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 18px; }
+:root[data-design="hyrule"] .binder {
+  aspect-ratio: 1 / 1.08; border-radius: 18px; color: var(--text);
+  background: radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--a) 22%, transparent) 0, transparent 46%), var(--hy-card);
+  box-shadow: var(--hy-frame), 0 10px 22px -12px rgba(0,0,0,.7);
+  transition: transform .16s ease, box-shadow .2s;
+}
+:root[data-design="hyrule"] .binder:active { transform: scale(.97); box-shadow: var(--hy-frame), 0 0 0 2px var(--a), 0 0 18px -4px var(--a); }
+:root[data-design="hyrule"] .binder::before {
+  /* Eckverzierungen */
+  content: ""; position: absolute; inset: 9px; width: auto; border-radius: 12px; pointer-events: none; box-shadow: none;
+  background:
+    linear-gradient(var(--hy-gold), var(--hy-gold)) left top / 14px 2px no-repeat, linear-gradient(var(--hy-gold), var(--hy-gold)) left top / 2px 14px no-repeat,
+    linear-gradient(var(--hy-gold), var(--hy-gold)) right top / 14px 2px no-repeat, linear-gradient(var(--hy-gold), var(--hy-gold)) right top / 2px 14px no-repeat,
+    linear-gradient(var(--hy-gold), var(--hy-gold)) left bottom / 14px 2px no-repeat, linear-gradient(var(--hy-gold), var(--hy-gold)) left bottom / 2px 14px no-repeat,
+    linear-gradient(var(--hy-gold), var(--hy-gold)) right bottom / 14px 2px no-repeat, linear-gradient(var(--hy-gold), var(--hy-gold)) right bottom / 2px 14px no-repeat;
+  opacity: .8;
+}
+:root[data-design="hyrule"] .binder::after { background: none; }
+:root[data-design="hyrule"] .binder .rings, :root[data-design="hyrule"] .binder .emblem { display: none; }
+:root[data-design="hyrule"] .binder .hy-ico {
+  display: flex; position: absolute; left: 50%; top: 14%; transform: translateX(-50%); width: 46%; aspect-ratio: 1; align-items: center; justify-content: center;
+  border-radius: 50%; color: var(--a);
+  background: radial-gradient(circle, color-mix(in srgb, var(--a) 18%, transparent) 0 55%, transparent 56%);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--a) 55%, transparent), 0 0 0 6px color-mix(in srgb, var(--a) 10%, transparent), 0 0 22px -6px var(--a);
+}
+:root[data-design="hyrule"] .binder .hy-ico .hy-svg { width: 62%; height: 62%; filter: drop-shadow(0 0 4px color-mix(in srgb, var(--a) 60%, transparent)); }
+:root[data-design="hyrule"][data-theme="light"] .binder .hy-ico { color: color-mix(in srgb, var(--a) 70%, #172B23); }
+:root[data-design="hyrule"] .binder .label { left: 10px; right: 10px; top: auto; bottom: 12%; background: none; box-shadow: none; padding: 0; text-align: center; color: var(--text); }
+:root[data-design="hyrule"] .binder .label b { font-size: 17px; }
+:root[data-design="hyrule"] .binder .label span { color: var(--muted); font-size: 12.5px; letter-spacing: .04em; }
+:root[data-design="hyrule"] .binder .menu { color: var(--muted); }
+:root[data-design="hyrule"] .binder.add { background: rgba(197,164,91,.06); border: 2px dashed rgba(197,164,91,.55); color: var(--hy-gold); box-shadow: none; }
+:root[data-design="hyrule"][data-theme="light"] .binder.add { color: #6d531c; border-color: #a88f55; }
+:root[data-design="hyrule"] .binder.add .ic { width: 34px; height: 34px; }
+:root[data-design="hyrule"] .binder.add span { font-family: var(--hy-serif); font-weight: 700; font-size: 16px; }
+
+/* Heft-/Ordnerkarten */
+:root[data-design="hyrule"] .item { background: var(--hy-card); border: 0; box-shadow: var(--hy-frame), 0 8px 18px -12px rgba(0,0,0,.7); border-radius: 16px; }
+:root[data-design="hyrule"] .item .thumb { background: radial-gradient(circle at 50% 30%, rgba(81,189,181,.10), transparent 70%), var(--desk); margin: 5px 5px 0; border-radius: 12px 12px 4px 4px; }
+:root[data-design="hyrule"] .item .meta b { font-family: var(--hy-serif); }
+:root[data-design="hyrule"] .crumbs button.cur { color: var(--hy-gold); }
+
+/* ---------- Editor ---------- */
+:root[data-design="hyrule"] .thumbs { background: linear-gradient(180deg, #172B23, #13241d); border-right: 1px solid rgba(197,164,91,.4); }
+:root[data-design="hyrule"][data-theme="light"] .thumbs { background: linear-gradient(180deg, #e7ddc4, #dcd0b2); border-right-color: #b9a77c; }
+:root[data-design="hyrule"] .scroller { background: radial-gradient(ellipse at 50% 0%, rgba(81,189,181,.07), transparent 60%), var(--desk); }
+:root[data-design="hyrule"] .page { box-shadow: 0 0 0 1px rgba(197,164,91,.35), 0 10px 28px rgba(0,0,0,.45); }
+:root[data-design="hyrule"] .zoom-pill { background: var(--hy-card); box-shadow: var(--hy-frame), var(--shadow); }
+:root[data-design="hyrule"] .swatch.on, :root[data-design="hyrule"] .color-choice button.on { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--hy-teal), 0 0 12px rgba(81,189,181,.5); }
+
+/* ---------- Werkzeugkasten & Rechner ---------- */
+:root[data-design="hyrule"] .tb-card, :root[data-design="hyrule"] .tb-form { background: var(--hy-card); border: 0; box-shadow: var(--hy-frame); }
+:root[data-design="hyrule"] .tb-card h2 { color: var(--hy-gold); }
+:root[data-design="hyrule"][data-theme="light"] .tb-card h2 { color: #6d531c; }
+:root[data-design="hyrule"] .fc { background: var(--hy-card); border: 0; box-shadow: var(--hy-frame), 0 18px 50px rgba(0,0,0,.5); }
+:root[data-design="hyrule"] .fc-head { background: linear-gradient(180deg, #1f392d, #172B23); border-bottom: 1px solid rgba(197,164,91,.5); color: #EEE7D5; }
+:root[data-design="hyrule"] .fc-head .ibtn { color: #EEE7D5; }
+:root[data-design="hyrule"] .fc-grip .ic { color: var(--hy-teal); }
+:root[data-design="hyrule"] .fc-disp { background: color-mix(in srgb, var(--bg) 80%, black 20%); box-shadow: inset 0 0 0 1px rgba(81,189,181,.35), inset 0 0 18px rgba(81,189,181,.08); border: 0; }
+:root[data-design="hyrule"][data-theme="light"] .fc-disp { background: #f6f0df; box-shadow: inset 0 0 0 1px rgba(29,122,115,.45); }
+:root[data-design="hyrule"] .fc-keys button { box-shadow: inset 0 0 0 1px rgba(197,164,91,.22); }
+:root[data-design="hyrule"] .fc-keys button.eq { background: linear-gradient(180deg, #5fcac2, #3fa79f); color: #0b201c; }
+:root[data-design="hyrule"][data-theme="light"] .fc-keys button.eq { background: linear-gradient(180deg, #2a8d85, #1d7a73); color: #fff; }
+:root[data-design="hyrule"] .fc-tabs button.on { background: rgba(81,189,181,.20); box-shadow: inset 0 0 0 1px rgba(81,189,181,.6); }
+
+/* ---------- Design-Auswahl in den Einstellungen (in beiden Designs sichtbar) ---------- */
+.design-choice { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+.design-choice .dc-l { background: linear-gradient(#F0B92E,#F0B92E) 0 0 / 30% 38% no-repeat, linear-gradient(#376AC8,#376AC8) 0 100% / 30% 56% no-repeat, linear-gradient(#A49CCF,#A49CCF) 38% 6% / 62% 12% no-repeat, linear-gradient(#D77A19,#D77A19) 38% 100% / 28% 14% no-repeat, #050505; border-radius: 16px 9px 9px 16px; }
+.design-choice .dc-s { background: linear-gradient(90deg, #E84155 0 14%, transparent 14% 86%, #36A9E1 86% 100%), radial-gradient(circle at 50% 50%, #ffffff 0 18%, transparent 19%), #17191F; border-radius: 9px; }
+
+.design-choice .dc-w { background: radial-gradient(circle at 80% 30%, rgba(92,200,240,.35) 0 16%, transparent 17%), linear-gradient(#fff, #fff) 14% 24% / 32% 30% no-repeat, linear-gradient(#fff, #fff) 58% 24% / 32% 30% no-repeat, linear-gradient(180deg, #f4f7fa, #dfe7ee); box-shadow: inset 0 0 0 2px #5cc8f0; }
+.design-choice .dc-p { background: radial-gradient(circle at 78% 70%, #d8d8d8 0 8%, transparent 9%), linear-gradient(#c7d9b4, #c7d9b4) 16% 22% / 58% 56% no-repeat, linear-gradient(160deg, #d8433a, #a52a24); box-shadow: inset 0 0 0 2px #3a3c40; }
+.design-choice button { display: flex; flex-direction: column; gap: 6px; align-items: stretch; padding: 8px; border-radius: 14px; background: var(--surface2); font-weight: 600; font-size: 14px; border: 2px solid transparent; }
+.design-choice button.on { border-color: var(--primary); }
+.design-choice i { display: block; height: 54px; border-radius: 9px; }
+.design-choice .dc-h { background: radial-gradient(circle at 50% 50%, rgba(81,189,181,.5) 0 10%, transparent 11%), linear-gradient(160deg, #243D32, #172B23); box-shadow: inset 0 0 0 2px #C5A45B; }
+.design-choice .dc-c { background: linear-gradient(135deg, #8b9cff, #2d3770); }
+
+/* ---------- Hochformat / kleine Breiten ---------- */
+@media (max-width: 700px) {
+  :root[data-design="hyrule"] .hy-hero { padding: 14px; gap: 14px; }
+  .hy-crest { width: 64px; height: 64px; }
+  .hy-kicker { font-size: 11px; letter-spacing: .2em; }
+}
+
+/* Feinschliff für die Zierschrift */
+:root[data-design="hyrule"] .topbar .title b, :root[data-design="hyrule"] .topbar .title { font-family: var(--hy-serif); }
+:root[data-design="hyrule"] .topbar .title b { font-size: 21px; font-weight: 400; letter-spacing: .03em; }
+:root[data-design="hyrule"] .home-head h1 { font-size: 30px; font-weight: 400; }
+:root[data-design="hyrule"] .binder .label b { font-size: 19px; font-weight: 400; }
+:root[data-design="hyrule"] .dialog h2, :root[data-design="hyrule"] .tb-card h2 { font-weight: 400; font-size: 1.35em; }
+:root[data-design="hyrule"] .tb-tile b, :root[data-design="hyrule"] .item .meta b { font-family: var(--hy-serif); font-weight: 400; font-size: 1.12em; }
+:root[data-design="hyrule"] .fc-title { font-weight: 400; font-size: 18px; }
+:root[data-design="hyrule"] .binder.add span { font-weight: 400; font-size: 18px; }
+:root[data-design="hyrule"] .topbar .title small { font-family: system-ui, sans-serif; letter-spacing: .04em; }
+
+/* =====================================================================
+ * Steintafeln (eigene, prozedural erzeugte Textur img/stone.png)
+ * Gemeißelter Rahmen + vertiefte Felder. Inhalte bleiben auf ruhigem Grund.
+ * ===================================================================== */
+:root[data-design="hyrule"] {
+  --hy-stone: url("../img/stone.png");
+  --hy-stone-tint: #4a5a50;           /* grünlicher Schiefer */
+  --hy-bevel: inset 2px 2px 0 rgba(255,255,255,.20), inset -3px -3px 0 rgba(0,0,0,.50), inset 0 0 0 1px rgba(0,0,0,.55);
+  --hy-recess: inset 3px 3px 7px rgba(0,0,0,.60), inset -2px -2px 0 rgba(255,255,255,.12);
+}
+:root[data-design="hyrule"][data-theme="light"] { --hy-stone-tint: #cdbf9a; --hy-bevel: inset 2px 2px 0 rgba(255,255,255,.55), inset -3px -3px 0 rgba(80,60,20,.35), inset 0 0 0 1px rgba(80,60,20,.45); --hy-recess: inset 3px 3px 7px rgba(60,40,10,.35), inset -2px -2px 0 rgba(255,255,255,.45); }
+
+/* Steinrahmen mit glatter Innenfläche: Dialoge, Karten, Rechner, Kacheln */
+:root[data-design="hyrule"] .dialog, :root[data-design="hyrule"] .tb-card, :root[data-design="hyrule"] .fc,
+:root[data-design="hyrule"] .tb-tile, :root[data-design="hyrule"] .item, :root[data-design="hyrule"] .menu-pop, :root[data-design="hyrule"] .tb-form {
+  border: 9px solid transparent;
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    var(--hy-stone) 0 0 / 192px border-box,
+    linear-gradient(var(--hy-stone-tint), var(--hy-stone-tint)) border-box;
+  background-blend-mode: normal, multiply, normal;
+  box-shadow: var(--hy-bevel), 0 12px 26px -10px rgba(0,0,0,.6);
+}
+:root[data-design="hyrule"] .fc { border-width: 7px; }
+:root[data-design="hyrule"] .menu-pop, :root[data-design="hyrule"] .tb-tile { border-width: 6px; }
+:root[data-design="hyrule"] .item .thumb { margin: 0; box-shadow: var(--hy-recess); }
+/* Innenkante, damit die Fläche wie eingelassen wirkt */
+:root[data-design="hyrule"] .dialog::before, :root[data-design="hyrule"] .tb-card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; box-shadow: var(--hy-recess); }
+:root[data-design="hyrule"] .dialog, :root[data-design="hyrule"] .tb-card { position: relative; }
+
+/* Kopfleisten als dunkler Steinbalken */
+:root[data-design="hyrule"] .topbar, :root[data-design="hyrule"] .fc-head {
+  background: var(--hy-stone) 0 0 / 192px, linear-gradient(180deg, #34463c, #26352d);
+  background-blend-mode: multiply, normal;
+}
+:root[data-design="hyrule"][data-theme="light"] .topbar { background: var(--hy-stone) 0 0 / 192px, linear-gradient(180deg, #e6dbbd, #d5c7a2); background-blend-mode: multiply, normal; }
+
+/* Startseiten-Kopf als große Steintafel mit eingelassener Inschrift */
+:root[data-design="hyrule"] .hy-hero {
+  border: 0; background: var(--hy-stone) 0 0 / 256px, linear-gradient(160deg, #4f6156, #34443b); background-blend-mode: multiply, normal;
+  box-shadow: var(--hy-bevel), 0 14px 30px -12px rgba(0,0,0,.7);
+}
+:root[data-design="hyrule"][data-theme="light"] .hy-hero { background: var(--hy-stone) 0 0 / 256px, linear-gradient(160deg, #e9dfc3, #d2c39d); background-blend-mode: multiply, normal; }
+:root[data-design="hyrule"] .hy-hero::after { background: none; inset: 12px; border-radius: 12px; box-shadow: var(--hy-recess); }
+:root[data-design="hyrule"] .hy-hero h1 { text-shadow: 0 2px 0 rgba(0,0,0,.55), 0 -1px 0 rgba(255,255,255,.12); }
+
+/* Fächer: jede Tafel aus eigenem farbigem Stein, Name auf eingelassener Platte */
+:root[data-design="hyrule"] .binder {
+  background: var(--hy-stone) 0 0 / 192px, linear-gradient(160deg, color-mix(in srgb, var(--a) 52%, #3d433e), color-mix(in srgb, var(--a) 34%, #262b28));
+  background-blend-mode: multiply, normal;
+  box-shadow: var(--hy-bevel), 0 12px 22px -12px rgba(0,0,0,.75);
+}
+:root[data-design="hyrule"][data-theme="light"] .binder {
+  background: var(--hy-stone) 0 0 / 192px, linear-gradient(160deg, color-mix(in srgb, var(--a) 40%, #efe6cd), color-mix(in srgb, var(--a) 30%, #d8c9a3));
+  background-blend-mode: multiply, normal;
+}
+:root[data-design="hyrule"] .binder::before {
+  /* eingelassenes Namensschild statt Goldecken */
+  inset: auto 12px 12px 12px; height: 31%; border-radius: 10px; opacity: 1;
+  background: rgba(10,16,13,.45); box-shadow: var(--hy-recess);
+}
+:root[data-design="hyrule"][data-theme="light"] .binder::before { background: rgba(255,250,235,.55); }
+:root[data-design="hyrule"] .binder .label { bottom: 12px; height: 31%; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
+:root[data-design="hyrule"] .binder .label b { color: #f3ead2; text-shadow: 0 2px 0 rgba(0,0,0,.6); }
+:root[data-design="hyrule"] .binder .label span { color: #d9cfb3; }
+:root[data-design="hyrule"][data-theme="light"] .binder .label b { color: #1f2a23; text-shadow: 0 1px 0 rgba(255,255,255,.7); }
+:root[data-design="hyrule"][data-theme="light"] .binder .label span { color: #4a4330; }
+:root[data-design="hyrule"] .binder .hy-ico {
+  top: 11%; width: 42%;
+  background: radial-gradient(circle, rgba(0,0,0,.30) 0 60%, transparent 61%);
+  box-shadow: var(--hy-recess), 0 0 0 2px color-mix(in srgb, var(--a) 70%, #000 0%), 0 0 18px -4px var(--a);
+  color: color-mix(in srgb, var(--a) 70%, #fff 30%);
+}
+:root[data-design="hyrule"][data-theme="light"] .binder .hy-ico { background: radial-gradient(circle, rgba(255,250,235,.55) 0 60%, transparent 61%); color: color-mix(in srgb, var(--a) 65%, #172B23); }
+:root[data-design="hyrule"] .binder .menu { color: rgba(255,255,255,.75); z-index: 2; }
+:root[data-design="hyrule"][data-theme="light"] .binder .menu { color: #3d3626; }
+:root[data-design="hyrule"] .binder:active { box-shadow: var(--hy-bevel), 0 0 0 3px var(--a), 0 0 20px -4px var(--a); }
+:root[data-design="hyrule"] .binder.add { background: rgba(0,0,0,.12); border: 2px dashed rgba(197,164,91,.6); box-shadow: var(--hy-recess); }
+:root[data-design="hyrule"] .binder.add::before { display: none; }
+/* heller Modus: sanfterer Sandstein, damit Texte gut lesbar bleiben */
+:root[data-design="hyrule"][data-theme="light"] { --hy-stone: url("../img/stone-light.png"); }
+:root[data-design="hyrule"] .hy-hero { background-size: 384px, auto; }
+:root[data-design="hyrule"] .fc { border-width: 4px; }
+:root[data-design="hyrule"][data-theme="light"] .topbar .title small { color: #5a4a20; }
+/* schwebender Rechner: Steinrahmen nur als Schatten, damit alle Tasten Platz haben */
+:root[data-design="hyrule"] .fc { border-width: 0; background: var(--surface); box-shadow: 0 0 0 3px #3a4a40, 0 0 0 4px rgba(197,164,91,.55), 0 18px 50px rgba(0,0,0,.5); }
+:root[data-design="hyrule"][data-theme="light"] .fc { box-shadow: 0 0 0 3px #cbbb92, 0 0 0 4px rgba(139,108,45,.6), 0 14px 40px rgba(60,45,15,.35); }

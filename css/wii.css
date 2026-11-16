@@ -1,0 +1,155 @@
+/* =====================================================================
+ * FOS Digital Binder – Wii Edition
+ * Zusätzliche Design-Schicht, greift nur bei <html data-design="wii">.
+ * Eigene Gestaltung: helle Kanal-Kacheln, hellblaue Verläufe, schwebende Blasen, Infoleiste mit Uhr.
+ * Keine Original-Grafiken oder Logos. Schreibfläche und Funktionen bleiben unberührt.
+ * Animationen nur mit transform/opacity; abschaltbar (Einstellungen → Animationen) und bei „weniger Bewegung“.
+ * ===================================================================== */
+/* Schrift: Nunito (SIL Open Font License, siehe fonts/nunito-OFL.txt), offline eingebettet, variable Strichstärke 200–1000 */
+@font-face { font-family: "Nunito FOS"; src: url("../fonts/nunito-wght.ttf") format("truetype"); font-weight: 200 1000; font-display: swap; }
+:root[data-design="wii"] body, :root[data-design="wii"] button, :root[data-design="wii"] input, :root[data-design="wii"] select, :root[data-design="wii"] textarea { font-family: "Nunito FOS", system-ui, sans-serif; }
+/* Notizen behalten ihre Schrift – nur die Oberfläche bekommt Nunito */
+:root[data-design="wii"] .page { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+.wi-bg, .wi-bar, .binder .wi-ch { display: none; }
+
+/* ---------- Farben (immer hell, wie das Vorbild) ---------- */
+:root[data-design="wii"] {
+  --wi-blue: #34bdef; --wi-blue2: #1592cf; --wi-ink: #3c4249;
+  --bg: #eef3f7; --surface: #ffffff; --surface2: #f2f6f9; --surface3: #e4ebf1; --line: #c8d5e0;
+  --text: #33393f; --muted: #626b74; --primary: #0e71a5; --on-primary: #ffffff; --primary-cont: #d6effa;
+  --danger: #d23a2c; --desk: #dfe6ec; --shadow: 0 8px 22px rgba(60,80,100,.18);
+  color-scheme: light;
+}
+:root[data-design="wii"] body { background: var(--bg); }
+
+/* Hintergrund: weiß-blauer Verlauf mit feinen Querlinien */
+:root[data-design="wii"] #home, :root[data-design="wii"] #subject, :root[data-design="wii"] .panel {
+  background:
+    repeating-linear-gradient(0deg, rgba(120,140,160,.07) 0 1px, transparent 1px 4px),
+    radial-gradient(ellipse 90% 60% at 50% 0%, #ffffff 0%, transparent 70%),
+    linear-gradient(180deg, #f6f9fb 0%, #e8eef3 100%);
+}
+
+/* schwebende Blasen (nur Startseite, 7 Ebenen mit transform – sehr günstig) */
+:root[data-design="wii"] .wi-bg { display: block; position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+
+:root[data-design="wii"] .home-scroll, :root[data-design="wii"] #home .topbar { position: relative; z-index: 1; }
+.wi-bg i { position: absolute; border-radius: 50%; will-change: transform;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0 8%, rgba(150,215,245,.20) 30%, rgba(120,200,240,.10) 60%, rgba(120,200,240,0) 72%);
+  box-shadow: inset 0 0 0 1px rgba(120,190,230,.18); animation: wifloat 26s ease-in-out infinite alternate; }
+.wi-bg i:nth-child(1) { width: 220px; height: 220px; left: 4%; top: 58%; animation-duration: 31s; }
+.wi-bg i:nth-child(2) { width: 120px; height: 120px; left: 22%; top: 18%; animation-duration: 24s; animation-delay: -6s; }
+.wi-bg i:nth-child(3) { width: 300px; height: 300px; left: 62%; top: 50%; animation-duration: 36s; animation-delay: -12s; }
+.wi-bg i:nth-child(4) { width: 80px; height: 80px; left: 48%; top: 8%; animation-duration: 21s; animation-delay: -3s; }
+.wi-bg i:nth-child(5) { width: 160px; height: 160px; left: 82%; top: 12%; animation-duration: 29s; animation-delay: -15s; }
+.wi-bg i:nth-child(6) { width: 60px; height: 60px; left: 36%; top: 72%; animation-duration: 19s; animation-delay: -9s; }
+.wi-bg i:nth-child(7) { width: 110px; height: 110px; left: 72%; top: 82%; animation-duration: 27s; animation-delay: -20s; }
+@keyframes wifloat { 0% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(18px, -40px, 0); } 100% { transform: translate3d(-14px, -80px, 0); } }
+
+/* ---------- Kopfleiste: hell, ruhig ---------- */
+:root[data-design="wii"] .topbar, :root[data-design="wii"] .subbar {
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(240,245,249,.96)); color: var(--wi-ink);
+  border-bottom: 1px solid #d3dee8; box-shadow: 0 2px 10px rgba(60,80,100,.08);
+}
+:root[data-design="wii"] #home .topbar { background: transparent; border-bottom: 0; box-shadow: none; }
+:root[data-design="wii"] .topbar .title { font-weight: 600; letter-spacing: .01em; color: #4a525a; }
+:root[data-design="wii"] .topbar .title small { color: var(--muted); }
+:root[data-design="wii"] .ibtn { border-radius: 50%; transition: background .2s, box-shadow .2s, transform .15s; }
+:root[data-design="wii"] .topbar .ibtn, :root[data-design="wii"] .subbar .ibtn { background: linear-gradient(180deg, #ffffff, #eef2f6); box-shadow: 0 1px 3px rgba(60,80,100,.18), inset 0 0 0 1px #d6e0e9; color: #5b646d; }
+:root[data-design="wii"] .ibtn:active { transform: scale(.94); }
+:root[data-design="wii"] .ibtn.on { background: linear-gradient(180deg, #e9f8fe, #cdeefc) !important; color: var(--wi-blue2) !important; box-shadow: inset 0 0 0 2px var(--wi-blue), 0 0 12px rgba(52,189,239,.35) !important; }
+:root[data-design="wii"] .sep { background: #d3dee8; }
+
+/* Knöpfe, Felder, Karten */
+:root[data-design="wii"] .btn { border-radius: 22px; background: linear-gradient(180deg, #ffffff, #edf2f6); color: #3c4249; box-shadow: 0 1px 3px rgba(60,80,100,.2), inset 0 0 0 1px #cfdae4; }
+:root[data-design="wii"] .btn.primary { background: linear-gradient(180deg, #4cc9f3, #1aa2dc); color: #fff; box-shadow: 0 2px 6px rgba(26,162,220,.4), inset 0 1px 0 rgba(255,255,255,.4); }
+:root[data-design="wii"] .btn:active { transform: scale(.97); }
+:root[data-design="wii"] input:focus, :root[data-design="wii"] select:focus, :root[data-design="wii"] textarea:focus { border-color: var(--wi-blue); box-shadow: 0 0 0 3px rgba(52,189,239,.2); }
+:root[data-design="wii"] .chip.on { background: #d6effa; color: var(--primary); box-shadow: inset 0 0 0 1.5px var(--wi-blue); }
+:root[data-design="wii"] .dialog, :root[data-design="wii"] .menu-pop, :root[data-design="wii"] .tb-card, :root[data-design="wii"] .tb-form, :root[data-design="wii"] .tb-tile, :root[data-design="wii"] .item {
+  background: linear-gradient(180deg, #ffffff, #f6f9fb); border: 1px solid #d3dee8; border-radius: 20px; box-shadow: 0 6px 18px rgba(60,80,100,.14);
+}
+:root[data-design="wii"] .dialog { border-radius: 26px; }
+:root[data-design="wii"] .toast { background: rgba(255,255,255,.97); color: var(--wi-ink); box-shadow: 0 6px 20px rgba(60,80,100,.25), inset 0 0 0 2px var(--wi-blue); }
+:root[data-design="wii"] .scrim { background: rgba(200,215,228,.55); }
+:root[data-design="wii"] .tb-tile .ic { color: var(--wi-blue2); }
+
+/* ---------- Startseite: Kanalmenü ---------- */
+:root[data-design="wii"] .home-scroll { padding-bottom: 190px; }
+:root[data-design="wii"] .hy-hero, :root[data-design="wii"] .pk-hero { display: none; }
+:root[data-design="wii"] .home-head h1 { color: #4a525a; font-weight: 600; }
+:root[data-design="wii"] .binders { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px 20px; }
+@media (max-width: 1000px) { :root[data-design="wii"] .binders { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px) { :root[data-design="wii"] .binders { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+:root[data-design="wii"] .binder {
+  aspect-ratio: 16 / 10.5; border-radius: 22px; border: 0; overflow: visible; color: var(--wi-ink);
+  background: repeating-linear-gradient(0deg, rgba(150,165,180,.07) 0 1px, transparent 1px 3px), linear-gradient(180deg, #ffffff 0%, #f1f5f8 100%);
+  box-shadow: 0 0 0 1.5px #cfd9e2, 0 6px 14px rgba(60,80,100,.16), inset 0 2px 0 #fff;
+  transition: transform .18s ease-out, box-shadow .18s ease-out;
+  animation: wiin .38s ease-out both; animation-delay: calc(var(--i, 0) * 35ms);
+}
+:root[data-design="wii"] .binder::before, :root[data-design="wii"] .binder::after { display: none; }
+:root[data-design="wii"] .binder .rings, :root[data-design="wii"] .binder .emblem, :root[data-design="wii"] .binder .label, :root[data-design="wii"] .binder .hy-ico, :root[data-design="wii"] .binder .pk-app { display: none; }
+:root[data-design="wii"] .binder .wi-ch { display: flex; position: absolute; inset: 0; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 10px; }
+:root[data-design="wii"] .wi-ico { width: 46%; max-width: 92px; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--w);
+  background: radial-gradient(circle at 35% 30%, #ffffff 0 30%, color-mix(in srgb, var(--w) 14%, #fff) 70%); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--w) 35%, #fff); }
+:root[data-design="wii"] .wi-ico .hy-svg { width: 64%; height: 64%; }
+:root[data-design="wii"] .wi-ico .hy-svg g { stroke-width: 2.6; }
+:root[data-design="wii"] .wi-ch b { font-size: 17px; font-weight: 600; color: #4a525a; text-align: center; line-height: 1.15; }
+:root[data-design="wii"] .wi-ch span { font-size: 12.5px; color: var(--muted); }
+/* Antippen: leicht vergrößern, blauer Rahmen */
+:root[data-design="wii"] .binder:active { transform: scale(1.05); box-shadow: 0 0 0 3px var(--wi-blue), 0 10px 24px rgba(30,150,210,.3); }
+:root[data-design="wii"] .binder .menu { top: 6px; right: 6px; left: auto; bottom: auto; color: #8a939c; z-index: 2; }
+:root[data-design="wii"] .binder.add { aspect-ratio: 16 / 10.5; background: rgba(255,255,255,.45); border: 2px dashed #9fd7f0; color: var(--wi-blue2); box-shadow: none; animation: wiin .38s ease-out both; }
+:root[data-design="wii"] .binder.add span { font-weight: 600; }
+@keyframes wiin { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
+
+/* Infoleiste unten mit Uhr und Datum */
+:root[data-design="wii"] .wi-bar { display: flex; position: absolute; left: 0; right: 0; bottom: 0; height: 168px; z-index: 2; align-items: flex-end; justify-content: space-between; padding: 0 clamp(14px, 3vw, 40px) 18px; pointer-events: none; }
+.wi-curve { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 -4px 8px rgba(60,80,100,.10)); }
+.wi-clock { position: relative; align-self: stretch; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 14px; color: #9aa3ab; }
+.wi-time { font-size: clamp(48px, 6.4vw, 70px); font-weight: 250; letter-spacing: .04em; line-height: 1; color: #a5adb5; text-shadow: 0 1px 0 #fff; }
+.wi-time span { display: inline-block; margin: 0 2px; animation: wiblink 2s steps(1) infinite; }
+.wi-date { margin-top: 6px; font-size: clamp(24px, 3.2vw, 34px); font-weight: 700; color: #7f8890; text-shadow: 0 1px 0 #fff; }
+@keyframes wiblink { 50% { opacity: .3; } }
+.wi-round { position: relative; pointer-events: auto; width: 96px; height: 96px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 40% 30%, #ffffff 0 40%, #e9eef2 100%); box-shadow: 0 0 0 3px #b5e5f7, 0 0 0 8px rgba(255,255,255,.9), 0 4px 14px rgba(60,80,100,.25); color: #9aa3ab; transition: transform .15s, box-shadow .2s; }
+.wi-round svg { width: 42%; height: 42%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.wi-round:active { transform: scale(1.06); box-shadow: 0 0 0 3px var(--wi-blue), 0 0 0 8px #fff, 0 0 18px rgba(52,189,239,.5); color: var(--wi-blue2); }
+@media (max-width: 700px) { .wi-round { width: 72px; height: 72px; } :root[data-design="wii"] .wi-bar { height: 140px; } }
+
+/* ---------- Seitenwechsel: weiches Hineinzoomen ins Fach, sanfte Rückkehr ---------- */
+:root[data-design="wii"] #subject { animation: wizoom .3s cubic-bezier(.2,.8,.3,1) both; }
+:root[data-design="wii"] #home { animation: wiback .28s ease-out both; }
+:root[data-design="wii"] .panel { animation: wifade .22s ease-out both; }
+@keyframes wizoom { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes wiback { from { opacity: 0; transform: scale(1.03); } to { opacity: 1; transform: none; } }
+@keyframes wifade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- Fachansicht ---------- */
+:root[data-design="wii"] .item { transition: transform .15s; }
+:root[data-design="wii"] .item:active { transform: scale(1.03); box-shadow: 0 0 0 2px var(--wi-blue), 0 8px 20px rgba(30,150,210,.25); }
+:root[data-design="wii"] .item .thumb { background: #e9eff4; border-radius: 14px 14px 6px 6px; margin: 6px 6px 0; }
+:root[data-design="wii"] .crumbs button.cur { color: var(--primary); }
+
+/* ---------- Editor: helles Umfeld, Schreibfläche unverändert ---------- */
+:root[data-design="wii"] .scroller { background: linear-gradient(180deg, #eef3f7, #dfe7ee); }
+:root[data-design="wii"] .thumbs { background: linear-gradient(180deg, #f7fafc, #e9eff4); border-right: 1px solid #d3dee8; }
+:root[data-design="wii"] .page { box-shadow: 0 0 0 1px #d0dae3, 0 8px 22px rgba(60,80,100,.18); }
+:root[data-design="wii"] .zoom-pill { background: #fff; border-radius: 26px; box-shadow: 0 4px 14px rgba(60,80,100,.2), inset 0 0 0 1.5px #b5e5f7; }
+:root[data-design="wii"] .swatch.on, :root[data-design="wii"] .color-choice button.on { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--wi-blue); }
+
+/* Werkzeugkasten-Tabs und Taschenrechner */
+:root[data-design="wii"] .tb-tabs button.on, :root[data-design="wii"] .fc-tabs button.on { background: #d6effa; color: var(--primary); box-shadow: inset 0 0 0 1.5px var(--wi-blue); }
+:root[data-design="wii"] .fc { border: 0; border-radius: 26px; box-shadow: 0 0 0 1.5px #cfd9e2, 0 18px 46px rgba(60,80,100,.3); }
+:root[data-design="wii"] .fc-head { background: linear-gradient(180deg, #ffffff, #eef3f7); border-bottom: 1px solid #d3dee8; }
+:root[data-design="wii"] .fc-disp { background: #f7fbfd; border: 1.5px solid #b5e5f7; }
+:root[data-design="wii"] .fc-keys button { border-radius: 16px; background: linear-gradient(180deg, #ffffff, #eef2f6); box-shadow: 0 1px 2px rgba(60,80,100,.2), inset 0 0 0 1px #d6e0e9; }
+:root[data-design="wii"] .fc-keys button.num { background: #fff; }
+:root[data-design="wii"] .fc-keys button.eq { background: linear-gradient(180deg, #4cc9f3, #1aa2dc); color: #fff; }
+
+/* ---------- Animationen abschaltbar ---------- */
+:root[data-anim="off"] .wi-bg i, :root[data-anim="off"] .binder, :root[data-anim="off"] #subject, :root[data-anim="off"] #home, :root[data-anim="off"] .panel, :root[data-anim="off"] .wi-time span { animation: none !important; }
+:root[data-anim="off"] .wi-bg { display: none !important; }
+@media (prefers-reduced-motion: reduce) { .wi-bg i, :root[data-design="wii"] .binder, :root[data-design="wii"] #subject, :root[data-design="wii"] #home { animation: none !important; } }
