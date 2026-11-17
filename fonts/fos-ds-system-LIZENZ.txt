@@ -1,0 +1,32 @@
+FOS DS System (fonts/fos-ds-system.ttf)
+======================================
+Grundlage: „Nintendo DS System Font“ von TechniMan, FontStruct
+https://fontstruct.com/fontstructions/show/1303163 – Lizenz: CC0 1.0 (Public Domain Dedication)
+http://creativecommons.org/publicdomain/zero/1.0/
+
+Änderungen für den FOS Digital Binder (ebenfalls CC0): Alle Zeichen 1:1 übernommen (Pixelraster 200 Einheiten),
+ergänzt: Ä Ö Ü ä ö ü ß ẞ € – — · • … „ ‚ « » ° § ² ³ × ÷ ± µ é è à á ê ç. Als TrueType neu erzeugt.
+
+--- Originale license.txt ---
+﻿The FontStruction “Nintendo DS System Font”
+(https://fontstruct.com/fontstructions/show/1303163) by “TechniMan” is
+licensed under a Creative Commons CC0 Public Domain Dedication license
+(http://creativecommons.org/publicdomain/zero/1.0/).
+[ancestry]
+--- Originale readme.txt ---
+﻿The font file in this archive was created using Fontstruct the free, online
+font-building tool.
+This font was created by “TechniMan”.
+This font has a homepage where this archive and other versions may be found:
+https://fontstruct.com/fontstructions/show/1303163
+[ancestry]
+Try Fontstruct at https://fontstruct.com
+It’s easy and it’s fun.
+
+Fontstruct is copyright ©2016-2026 Rob Meek
+
+LEGAL NOTICE:
+In using this font you must comply with the licensing terms described in the
+file “license.txt” included with this archive.
+If you redistribute the font file in this archive, it must be accompanied by all
+the other files from this archive, including this one.

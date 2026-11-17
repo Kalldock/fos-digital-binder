@@ -29,6 +29,7 @@ const App = {
     window.addEventListener('pagehide', () => window.flushSave());
     App.showHome();
     Poketch.boot();
+    DS.boot();
   },
 
   seed() {
@@ -54,11 +55,11 @@ const App = {
     if (t === 'system') t = window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
     document.documentElement.dataset.theme = t;
     // Design (Klassisch / Hyrule Edition) ist reine Darstellung – keine Daten werden verändert
-    const d = ['classic', 'poketch', 'wii', 'lcars', 'switch'].includes(App.settings.design) ? App.settings.design : 'hyrule';
+    const d = ['classic', 'poketch', 'wii', 'lcars', 'switch', 'ds'].includes(App.settings.design) ? App.settings.design : 'hyrule';
     document.documentElement.dataset.design = d;
     document.documentElement.dataset.anim = App.settings.anim === false ? 'off' : 'on';
     const m = document.querySelector('meta[name=theme-color]');
-    if (m) m.content = d === 'switch' ? (t === 'light' ? '#F4F5F7' : '#17191F') : d === 'lcars' ? '#050505' : d === 'wii' ? '#eef3f7' : d === 'poketch' ? '#b8302a' : d === 'hyrule' ? (t === 'light' ? '#d9d0b8' : '#172b23') : (t === 'light' ? '#f2f3f8' : '#161a28');
+    if (m) m.content = d === 'ds' ? '#d9dfe7' : d === 'switch' ? (t === 'light' ? '#F4F5F7' : '#17191F') : d === 'lcars' ? '#050505' : d === 'wii' ? '#eef3f7' : d === 'poketch' ? '#b8302a' : d === 'hyrule' ? (t === 'light' ? '#d9d0b8' : '#172b23') : (t === 'light' ? '#f2f3f8' : '#161a28');
   },
 
   /* ------------------------------------------------------------ data helpers */
@@ -191,6 +192,7 @@ const App = {
       ${Wii.bubbles()}
       <div class="lc-console"></div>
       <div class="sw-home"></div>
+      <div class="ds-home"></div>
       <div class="home-scroll">
         <div class="pk-hero"></div>
         <div class="hy-hero">${Hyrule.crest}<div class="hy-hero-t"><div class="hy-kicker">Abenteuer-Tagebuch der FOS</div><h1>FOS DIGITAL BINDER</h1>${Hyrule.band}</div></div>
@@ -208,6 +210,7 @@ const App = {
     Wii.mountHome(v);
     Lcars.mountHome(v);
     Switch2.mountHome(v);
+    DS.mountHome(v);
     const grid = $('.binders', v);
     App.index.subjects.forEach((s, idx) => {
       const n = App.docCount(s.id);
@@ -598,8 +601,10 @@ const App = {
     let pc = s.paperColor;
     await dialog({
       title: 'Einstellungen',
-      body: `<div class="field"><label>Design</label><div class="design-choice"><button data-d="hyrule" class="${!['classic', 'poketch', 'wii', 'lcars', 'switch'].includes(s.design) ? 'on' : ''}"><i class="dc-h"></i><span>Hyrule Edition</span></button><button data-d="poketch" class="${s.design === 'poketch' ? 'on' : ''}"><i class="dc-p"></i><span>Pokétch Edition</span></button><button data-d="wii" class="${s.design === 'wii' ? 'on' : ''}"><i class="dc-w"></i><span>Wii Edition</span></button><button data-d="lcars" class="${s.design === 'lcars' ? 'on' : ''}"><i class="dc-l"></i><span>LCARS Edition</span></button><button data-d="switch" class="${s.design === 'switch' ? 'on' : ''}"><i class="dc-s"></i><span>Switch 2 Edition</span></button><button data-d="classic" class="${s.design === 'classic' ? 'on' : ''}"><i class="dc-c"></i><span>Klassisch</span></button></div></div>
+      body: `<div class="field"><label>Design</label><div class="design-choice"><button data-d="hyrule" class="${!['classic', 'poketch', 'wii', 'lcars', 'switch', 'ds'].includes(s.design) ? 'on' : ''}"><i class="dc-h"></i><span>Hyrule Edition</span></button><button data-d="poketch" class="${s.design === 'poketch' ? 'on' : ''}"><i class="dc-p"></i><span>Pokétch Edition</span></button><button data-d="wii" class="${s.design === 'wii' ? 'on' : ''}"><i class="dc-w"></i><span>Wii Edition</span></button><button data-d="lcars" class="${s.design === 'lcars' ? 'on' : ''}"><i class="dc-l"></i><span>LCARS Edition</span></button><button data-d="switch" class="${s.design === 'switch' ? 'on' : ''}"><i class="dc-s"></i><span>Switch 2 Edition</span></button><button data-d="ds" class="${s.design === 'ds' ? 'on' : ''}"><i class="dc-x"></i><span>Nintendo DS Edition</span></button><button data-d="classic" class="${s.design === 'classic' ? 'on' : ''}"><i class="dc-c"></i><span>Klassisch</span></button></div></div>
       <div class="field"><label>Animationen (Übergänge, schwebende Blasen)</label><select id="sanim"><option value="1">An</option><option value="0">Aus – ruhiger und akkuschonender</option></select></div>
+      <div class="field ds-only"><label>Nintendo DS Edition: Startbildschirm</label><select id="sdsboot"><option value="1">Beim App-Start zeigen</option><option value="0">Aus</option></select></div>
+      <div class="field ds-only"><label>Nintendo DS Edition: Töne</label><select id="sdssound"><option value="boot">Nur Startton</option><option value="all">Startton + Tippgeräusche</option><option value="off">Aus</option></select></div>
       <div class="field"><label>Darstellung der App</label><select id="st"><option value="dark">Dunkel</option><option value="light">Hell</option><option value="system">Wie System</option></select></div>
       <div class="field"><label>Papierfarbe (unabhängig vom Dark Mode)</label><div class="color-choice">${PAPER_COLORS.map(([c, l]) => `<button title="${l}" data-c="${c}" style="background:${c};box-shadow:inset 0 0 0 1px #999" class="${c === pc ? 'on' : ''}"></button>`).join('')}</div></div>
       <div class="field"><label>Eingabe mit dem Finger</label><select id="sf"><option value="auto">Automatisch – zeichnen, bis ein Stift erkannt wird</option><option value="draw">Finger zeichnet immer</option><option value="pan">Finger scrollt nur (Handballen-Schutz)</option></select></div>
@@ -611,6 +616,12 @@ const App = {
         $('#st', d).value = s.theme; $('#sf', d).value = s.finger;
         $('#sanim', d).value = s.anim === false ? '0' : '1';
         $('#sanim', d).onchange = (e) => { s.anim = e.target.value === '1'; App.applyTheme(); };
+        $('#sdsboot', d).value = s.dsBoot === false ? '0' : '1';
+        $('#sdsboot', d).onchange = (e) => { s.dsBoot = e.target.value === '1'; };
+        $('#sdssound', d).value = s.dsSound || 'boot';
+        $('#sdssound', d).onchange = (e) => { s.dsSound = e.target.value; if (s.dsSound !== 'off') DS._tone([[1047, 0.08, 'square'], [1568, 0.2, 'triangle']], 0.05); };
+        const dsVis = () => $$('.ds-only', d).forEach((x) => x.classList.toggle('hidden', s.design !== 'ds'));
+        dsVis(); $$('.design-choice button', d).forEach((b) => b.addEventListener('click', () => setTimeout(() => { dsVis(); if (b.dataset.d === 'ds') DS.boot(true); }, 0)));
         $$('.design-choice button', d).forEach((b) => b.onclick = () => { s.design = b.dataset.d; App.applyTheme(); $$('.design-choice button', d).forEach((x) => x.classList.toggle('on', x === b)); });
         $('#st', d).onchange = (e) => { s.theme = e.target.value; App.applyTheme(); };
         $('#sf', d).onchange = (e) => { s.finger = e.target.value; };
@@ -639,6 +650,8 @@ const App = {
       const data = subject
         ? { app: 'fos-digital-binder', kind: 'subject', v: 1, created: new Date().toISOString(), subjects: [subject], items, docs }
         : { app: 'fos-digital-binder', kind: 'full', v: 1, created: new Date().toISOString(), index: App.index, docs };
+      // PictoNotizen (DS Edition) – optional, ältere Backups ohne diesen Teil bleiben gültig
+      if (!subject) { const pc = Store.read('pictochat.json'); if (pc && Array.isArray(pc.notes) && pc.notes.length) data.pictochat = pc; }
       const name = subject ? `FOS-Binder-${safeName(subject.name)}-${today()}.json` : `FOS-Binder-Backup-${today()}.json`;
       busy(false);
       const r = await saveTextFile(name, 'application/json', JSON.stringify(data));
@@ -661,6 +674,7 @@ const App = {
       for (const it of App.index.items) if (it.type === 'doc') safety.docs[it.id] = App.loadDoc(it.id);
       Store.write('safety_before_restore.json', safety);
       for (const [id, d] of Object.entries(data.docs || {})) Store.write('doc_' + id + '.json', d);
+      if (data.pictochat && Array.isArray(data.pictochat.notes)) Store.write('pictochat.json', data.pictochat);
       App.index = data.index;
       App.settings = Object.assign(App.settings, data.index.settings || {});
       App.index.settings = App.settings;

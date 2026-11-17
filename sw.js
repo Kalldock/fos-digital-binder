@@ -1,8 +1,9 @@
-/* FOS Digital Binder – Offline-Speicher (Version 5.3) */
-const CACHE = 'fos-binder-5.3-cb8e17be44';
+/* FOS Digital Binder – Offline-Speicher (Version 5.4) */
+const CACHE = 'fos-binder-5.4-d3f42aebcc';
 const FILES = [
 "./",
 "css/app.css",
+"css/ds.css",
 "css/hyrule.css",
 "css/lcars.css",
 "css/poketch.css",
@@ -10,6 +11,11 @@ const FILES = [
 "css/wii.css",
 "fonts/antonio-OFL.txt",
 "fonts/antonio-wght.ttf",
+"fonts/ds-original/license.txt",
+"fonts/ds-original/nintendo-ds-system-font.otf",
+"fonts/ds-original/readme.txt",
+"fonts/fos-ds-system-LIZENZ.txt",
+"fonts/fos-ds-system.ttf",
 "fonts/fos-lcd-pixel.ttf",
 "fonts/nunito-OFL.txt",
 "fonts/nunito-wght.ttf",
@@ -28,6 +34,7 @@ const FILES = [
 "js/calc-engine.js",
 "js/calculator.js",
 "js/core.js",
+"js/ds.js",
 "js/editor.js",
 "js/expr.js",
 "js/formulas.js",
